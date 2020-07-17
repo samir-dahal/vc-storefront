@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.Storefront", "VirtoCommerce.Storefront\VirtoCommerce.Storefront.csproj", "{84C14E0A-0F36-4BB5-9C00-7E8FB72891C2}"
 EndProject
@@ -9,6 +9,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.Storefront.Tests", "VirtoCommerce.Storefront.Tests\VirtoCommerce.Storefront.Tests.csproj", "{0EC8A6E2-1A58-4125-8F09-243ED02AF1DE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VirtoCommerce.LiquidThemeEngine", "VirtoCommerce.LiquidThemeEngine\VirtoCommerce.LiquidThemeEngine.csproj", "{21E262AC-A0AB-4A9C-8759-6AFDC9CEE49E}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{60CF5CA9-EE01-4A0F-A9DB-C7E2C4A6296E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ Global
 		{21E262AC-A0AB-4A9C-8759-6AFDC9CEE49E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21E262AC-A0AB-4A9C-8759-6AFDC9CEE49E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21E262AC-A0AB-4A9C-8759-6AFDC9CEE49E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60CF5CA9-EE01-4A0F-A9DB-C7E2C4A6296E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60CF5CA9-EE01-4A0F-A9DB-C7E2C4A6296E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60CF5CA9-EE01-4A0F-A9DB-C7E2C4A6296E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60CF5CA9-EE01-4A0F-A9DB-C7E2C4A6296E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

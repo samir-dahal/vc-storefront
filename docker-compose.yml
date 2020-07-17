@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  virtocommerce.storefront:
+    image: ${DOCKER_REGISTRY-}virtocommercestorefront
+    build:
+      context: .
+      dockerfile: VirtoCommerce.Storefront/Dockerfile
