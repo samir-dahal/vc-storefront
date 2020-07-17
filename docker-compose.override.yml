@@ -3,8 +3,19 @@ version: '3.4'
 services:
   virtocommerce.storefront:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - VirtoCommerce__Endpoint__Url=${PLATFORM_URL}
+      - VirtoCommerce__Endpoint__UserName=admin
+      - VirtoCommerce__Endpoint__Password=store
+      - ASPNETCORE_ENVIRONMENT=Development 
     ports:
-      - "80"
+      - "${DOCKER_STOREFRONT_PORT:-8080}:80"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${CMS_CONTENT_VOLUME}:/app/wwwroot/cms-content
+    networks:
+        - virto
+
+networks:
+  virto:
+    external:
+      name: nat        
