@@ -158,7 +158,7 @@ jobs:
       uses: benc-uk/workflow-dispatch@v1
       with:
         workflow: Deploy
-        token: ${{  secrets.REPO_TOKEN }}
+        token: ${{ secrets.REPO_TOKEN }}
         inputs: '{ "versionTag": "{{ steps.image.outputs.fullVersion }}" }'
 
     - name: Set Build status Failed
