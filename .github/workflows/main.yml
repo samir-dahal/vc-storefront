@@ -67,8 +67,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Get Image Tag
-      uses: VirtoCommerce/vc-github-actions/get-image-tag@v2
+    - name: Get Image Version
+      uses: VirtoCommerce/vc-github-actions/get-image-version@v3.0.1
       id: image
 
     - name: Install VirtoCommerce.GlobalTool
@@ -81,7 +81,7 @@ jobs:
       shell: pwsh
       run: |
         Invoke-WebRequest -Uri https://raw.githubusercontent.com/VirtoCommerce/vc-docker/master/linux/storefront/Dockerfile -OutFile artifacts/Dockerfile
-        docker build artifacts --build-arg SOURCE=. --tag "docker.pkg.github.com/$('${{ github.repository }}'.ToLower())/storefront:${{ steps.image.outputs.tag }}"
+        docker build artifacts --build-arg SOURCE=. --tag "docker.pkg.github.com/$('${{ github.repository }}'.ToLower())/storefront:${{ steps.image.outputs.fullVersion }}"
 
     - name: Docker Login
       uses: azure/docker-login@v1
@@ -93,7 +93,7 @@ jobs:
     - name: Push Docker Image to GitHub
       run: |
         REPOSITORY=$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]') 
-        docker push "docker.pkg.github.com/$REPOSITORY/storefront:${{ steps.image.outputs.tag }}"
+        docker push "docker.pkg.github.com/$REPOSITORY/storefront:${{ steps.image.outputs.fullVersion }}"
 
   publish:
     name: Publish image
@@ -117,7 +117,7 @@ jobs:
     - name: Pull Docker Image from GitHub
       run: |
         REPOSITORY=$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]') 
-        docker pull "docker.pkg.github.com/$REPOSITORY/storefront:${{ steps.image.outputs.tag }}"
+        docker pull "docker.pkg.github.com/$REPOSITORY/storefront:${{ steps.image.outputs.fullVersion }}"
 
     - name: Push Docker Image to docker.pkg.github.com
       shell: pwsh
@@ -136,7 +136,7 @@ jobs:
 
         $DOCKER_TAG = $DOCKER_TAG.Replace('/', '_')
         
-        docker tag "$($REPOSITORY):${{ steps.image.outputs.tag }}" "$($REPOSITORY):$($DOCKER_TAG)"
+        docker tag "$($REPOSITORY):${{ steps.image.outputs.fullVersion }}" "$($REPOSITORY):$($DOCKER_TAG)"
         docker push "$($REPOSITORY):$($DOCKER_TAG)"
         echo "::set-env name=BUILD_STATE::successful"
 
@@ -149,10 +149,17 @@ jobs:
         REPOSITORY=$(echo $GITHUB_REPOSITORY | tr '[A-Z]' '[a-z]') 
         DOCKER_TAG='dev-linux-experimental'
         if [ '${{ github.ref }}' = 'refs/heads/master' ]; then DOCKER_TAG=linux-experimental; fi
-        docker tag docker.pkg.github.com/$REPOSITORY/storefront:${{ steps.image.outputs.tag }} ${{ secrets.DOCKER_USERNAME }}/storefront:$DOCKER_TAG
+        docker tag docker.pkg.github.com/$REPOSITORY/storefront:${{ steps.image.outputs.fullVersion }} ${{ secrets.DOCKER_USERNAME }}/storefront:$DOCKER_TAG
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
         docker push ${{ secrets.DOCKER_USERNAME }}/storefront:$DOCKER_TAG
         echo "::set-env name=BUILD_STATE::successful"
+    
+    - name: Invoke deploy to cd.govirto.com
+      uses: benc-uk/workflow-dispatch@v1
+      with:
+        workflow: Deploy
+        token: ${{  secrets.REPO_TOKEN }}
+        inputs: '{ "versionTag": "{{ steps.image.outputs.fullVersion }}" }'
 
     - name: Set Build status Failed
       if: failure()
