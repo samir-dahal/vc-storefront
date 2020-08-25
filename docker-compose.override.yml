@@ -32,11 +32,13 @@ services:
       - ConnectionStrings__VirtoCommerce=Data Source=vc-db;Initial Catalog=VirtoCommerce3docker;Persist Security Info=True;User ID=sa;Password=v!rto_Labs!;MultipleActiveResultSets=False;
       - Assets__FileSystem__PublicUrl=http://localhost:${DOCKER_PLATFORM_PORT:-8090}/assets/
       - Content__FileSystem__PublicUrl=http://localhost:${DOCKER_PLATFORM_PORT:-8090}/cms-content/
+      - VirtoCommerce__Hangfire__JobStorageType=Memory
     depends_on:
       - vc-db 
     entrypoint: ["/wait-for-it.sh", "vc-db:1433", "-t", "120", "--", "dotnet", "VirtoCommerce.Platform.Web.dll"]
     volumes:
       - ${CMS_CONTENT_VOLUME}:/opt/virtocommerce/platform/wwwroot/cms-content
+      - modules-volume:/opt/virtocommerce/platform/Modules
     networks:
       - virto
 
@@ -50,6 +52,7 @@ services:
       - vc-platform-web    
     ports:
       - "${DOCKER_STOREFRONT_PORT:-8080}:80"
+      - "22:22"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${CMS_CONTENT_VOLUME}:/app/wwwroot/cms-content
@@ -57,6 +60,8 @@ services:
         - virto
 
 volumes:
+  modules-volume:
+    name: modules-volume
   db-volume:
     name: db-volume
 
