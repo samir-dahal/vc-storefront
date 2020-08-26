@@ -39,6 +39,7 @@ services:
     volumes:
       - ${CMS_CONTENT_VOLUME}:/opt/virtocommerce/platform/wwwroot/cms-content
       - modules-volume:/opt/virtocommerce/platform/Modules
+      - assets-volume:/opt/virtocommerce/platform/wwwroot/assets
     networks:
       - virto
 
@@ -62,8 +63,10 @@ services:
 volumes:
   modules-volume:
     name: modules-volume
+  assets-volume:
+    name: assets-volume
   db-volume:
-    name: db-volume
+    name: db-volume 
 
 networks:
   virto:
